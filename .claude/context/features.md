@@ -32,12 +32,15 @@
 
 ---
 
-## סקילים קיימים ב-Claude Chat (לא ב-Claude Code)
+## סקילים — כולם ב-`.claude/commands/`
 
-| שם סקיל | פונקציה |
-|---------|---------|
-| `morning-brief` | בריף בוקר יומי: מחירים + חדשות + עדכון דאשבורד |
-| `stock-add` | הוספת מנייה לנוטיין + דאשבורד לפי STOCK_ADD |
-| `alert-add` | הוספת התראת מחיר + עדכון alerts.json |
-| `technical-analysis` | ניתוח גרף → שמירה בנוטיין |
-| `weekly-review` | ריביו שבועי ביקורתי |
+| קובץ | רץ ב | פונקציה |
+|------|------|---------|
+| `update-memory.md` | Claude Code (`/update-memory`) | עדכון קבצי זיכרון בסוף שיחה |
+| `morning-brief.md` | Claude Chat | בריף בוקר יומי: מחירים + חדשות + עדכון דאשבורד |
+| `stock-add.md` | Claude Chat | הוספת מנייה לנוטיין + דאשבורד לפי STOCK_ADD |
+| `alert-add.md` | Claude Chat | הוספת התראת מחיר + עדכון alerts.json |
+| `technical-analysis.md` | Claude Chat | ניתוח גרף → שמירה בנוטיין |
+| `weekly-review.md` | Claude Chat | ריביו שבועי ביקורתי |
+
+> הפרומפטים של סקילי Claude Chat ממתינים להעתקה מהצ'אט הרגיל.
