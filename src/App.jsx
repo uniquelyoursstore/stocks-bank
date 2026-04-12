@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 
 const API = "/api/stocks";
 
-// ג”€ג”€ג”€ Helpers ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function fmt(n, digits = 2) {
-  if (n == null) return "ג€”";
+  if (n == null) return "—";
   return Number(n).toLocaleString("he-IL", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 }
 function pct(n) {
-  if (n == null) return "ג€”";
+  if (n == null) return "—";
   return `${Number(n).toFixed(1)}%`;
 }
 function colorPnl(val) {
@@ -23,7 +23,7 @@ async function fetchStocks(params = {}) {
   return res.json();
 }
 
-// ג”€ג”€ג”€ Shared components ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── Shared components ────────────────────────────────────────────────────────
 
 function Card({ children, style }) {
   return <div style={{ background: "#1e1e2e", borderRadius: 12, padding: "16px 20px", ...style }}>{children}</div>;
@@ -44,10 +44,10 @@ function Badge({ text, color }) {
   );
 }
 function Loader() {
-  return <div style={{ color: "#888", padding: 40, textAlign: "center" }}>׳˜׳•׳¢׳ ׳ ׳×׳•׳ ׳™׳...</div>;
+  return <div style={{ color: "#888", padding: 40, textAlign: "center" }}>טוען נתונים...</div>;
 }
 function ErrorMsg({ msg }) {
-  return <div style={{ color: "#ef4444", padding: 20 }}>׳©׳’׳™׳׳”: {msg}</div>;
+  return <div style={{ color: "#ef4444", padding: 20 }}>שגיאה: {msg}</div>;
 }
 function Table({ rows, columns }) {
   return (
@@ -67,7 +67,7 @@ function Table({ rows, columns }) {
             <tr key={row.id || i} style={{ borderBottom: "1px solid #2a2a3e" }}>
               {columns.map((c) => (
                 <td key={c.key} style={{ padding: "8px 12px", textAlign: c.align || "left" }}>
-                  {c.render ? c.render(row) : row[c.key] ?? "ג€”"}
+                  {c.render ? c.render(row) : row[c.key] ?? "—"}
                 </td>
               ))}
             </tr>
@@ -78,7 +78,7 @@ function Table({ rows, columns }) {
   );
 }
 
-// ג”€ג”€ג”€ News Modal ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── News Modal ───────────────────────────────────────────────────────────────
 
 function NewsModal({ ticker, onClose }) {
   const [news, setNews] = useState([]);
@@ -102,13 +102,13 @@ function NewsModal({ ticker, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-          <h3 style={{ margin: 0, color: "#a78bfa" }}>נ“° ׳—׳“׳©׳•׳×: {ticker}</h3>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "#888", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>ג•</button>
+          <h3 style={{ margin: 0, color: "#a78bfa" }}>📰 חדשות: {ticker}</h3>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: "#888", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>✕</button>
         </div>
         {loading && <Loader />}
         {error && <ErrorMsg msg={error} />}
         {!loading && !error && news.length === 0 && (
-          <div style={{ color: "#888", textAlign: "center", padding: 20 }}>׳׳™׳ ׳—׳“׳©׳•׳× ׳–׳׳™׳ ׳•׳×</div>
+          <div style={{ color: "#888", textAlign: "center", padding: 20 }}>אין חדשות זמינות</div>
         )}
         {news.map((n, i) => (
           <a
@@ -120,7 +120,7 @@ function NewsModal({ ticker, onClose }) {
           >
             <div style={{ color: "#e2e8f0", fontSize: 14, marginBottom: 5, lineHeight: 1.5 }}>{n.title}</div>
             <div style={{ color: "#6b7280", fontSize: 11 }}>
-              {n.publisher}{n.time ? ` ֲ· ${new Date(n.time).toLocaleDateString("he-IL")}` : ""}
+              {n.publisher}{n.time ? ` · ${new Date(n.time).toLocaleDateString("he-IL")}` : ""}
             </div>
           </a>
         ))}
@@ -129,7 +129,7 @@ function NewsModal({ ticker, onClose }) {
   );
 }
 
-// ג”€ג”€ג”€ Alerts Banner ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── Alerts Banner ────────────────────────────────────────────────────────────
 
 function AlertsBanner() {
   const [triggered, setTriggered] = useState([]);
@@ -161,10 +161,10 @@ function AlertsBanner() {
   return (
     <div style={{ background: "#7c1d1d", borderBottom: "2px solid #dc2626", padding: "10px 24px" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-        <span style={{ fontWeight: 700, color: "#fca5a5", fontSize: 14 }}>נ”” ׳”׳×׳¨׳׳•׳× ׳׳—׳™׳¨ ׳”׳•׳₪׳¢׳׳•:</span>
+        <span style={{ fontWeight: 700, color: "#fca5a5", fontSize: 14 }}>🔔 התראות מחיר הופעלו:</span>
         {triggered.map((a) => (
           <span key={a.id} style={{ background: "#991b1b", borderRadius: 8, padding: "4px 12px", color: "#fef2f2", fontSize: 13, fontWeight: 600 }}>
-            {a.ticker} {a.direction === "above" ? "ג†‘" : "ג†“"} ${a.triggerPrice}{a.note ? ` ג€” ${a.note}` : ""}
+            {a.ticker} {a.direction === "above" ? "↑" : "↓"} ${a.triggerPrice}{a.note ? ` — ${a.note}` : ""}
           </span>
         ))}
       </div>
@@ -172,7 +172,7 @@ function AlertsBanner() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 1: ׳‘׳ ׳§ ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 1: בנק ───────────────────────────────────────────────────────────────
 
 function BankTab() {
   const [data, setData] = useState(null);
@@ -207,14 +207,14 @@ function BankTab() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>׳¡׳§׳™׳¨׳× ׳‘׳ ׳§</h2>
+      <h2 style={{ marginBottom: 20 }}>סקירת בנק</h2>
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
-        <StatBox label="׳¡׳”׳´׳› ׳¨׳©׳•׳׳•׳×" value={stats.total} />
-        <StatBox label="׳¢׳¡׳§׳׳•׳× ׳₪׳×׳•׳—׳•׳×" value={stats.openTrades ?? "ג€”"} color="#60a5fa" />
-        <StatBox label="׳¢׳¡׳§׳׳•׳× ׳¡׳’׳•׳¨׳•׳×" value={stats.closedTrades ?? "ג€”"} color="#a78bfa" />
-        <StatBox label="׳׳—׳•׳– ׳”׳¦׳׳—׳”" value={stats.winRate ? pct(stats.winRate) : "ג€”"} color="#22c55e" />
-        <StatBox label="P&L ׳›׳•׳׳" value={fmt(stats.totalPnl)} color={colorPnl(stats.totalPnl)} />
+        <StatBox label="סה״כ רשומות" value={stats.total} />
+        <StatBox label="עסקאות פתוחות" value={stats.openTrades ?? "—"} color="#60a5fa" />
+        <StatBox label="עסקאות סגורות" value={stats.closedTrades ?? "—"} color="#a78bfa" />
+        <StatBox label="אחוז הצלחה" value={stats.winRate ? pct(stats.winRate) : "—"} color="#22c55e" />
+        <StatBox label="P&L כולל" value={fmt(stats.totalPnl)} color={colorPnl(stats.totalPnl)} />
       </div>
 
       {/* Sector filter buttons */}
@@ -224,7 +224,7 @@ function BankTab() {
             onClick={() => setSectorFilter("all")}
             style={{ padding: "5px 14px", borderRadius: 20, border: "none", cursor: "pointer", fontSize: 12, background: sectorFilter === "all" ? "#6366f1" : "#2a2a3e", color: sectorFilter === "all" ? "#fff" : "#aaa" }}
           >
-            ׳›׳ ׳”׳¡׳§׳˜׳•׳¨׳™׳ ({data.data.length})
+            כל הסקטורים ({data.data.length})
           </button>
           {allSectors.map((s) => {
             const count = data.data.filter((r) => r.sector === s).length;
@@ -245,17 +245,17 @@ function BankTab() {
         <Table
           rows={filtered.slice(0, 50)}
           columns={[
-            { key: "name", label: "׳©׳" },
-            { key: "ticker", label: "׳˜׳™׳§׳¨" },
-            { key: "sector", label: "׳¡׳§׳˜׳•׳¨" },
-            { key: "portfolio", label: "׳×׳™׳§" },
+            { key: "name", label: "שם" },
+            { key: "ticker", label: "טיקר" },
+            { key: "sector", label: "סקטור" },
+            { key: "portfolio", label: "תיק" },
             {
               key: "livePrice",
-              label: "׳׳—׳™׳¨ ׳—׳™",
+              label: "מחיר חי",
               align: "right",
               render: (r) => {
                 const lp = r.ticker ? livePrices[r.ticker] : null;
-                if (!lp || lp.price == null) return <span style={{ color: "#555" }}>ג€”</span>;
+                if (!lp || lp.price == null) return <span style={{ color: "#555" }}>—</span>;
                 return (
                   <span>
                     <span style={{ color: "#fff", fontWeight: 600 }}>${fmt(lp.price)}</span>
@@ -270,8 +270,8 @@ function BankTab() {
             },
             {
               key: "status",
-              label: "׳¡׳˜׳˜׳•׳¡",
-              render: (r) => <Badge text={r.status || "ג€”"} color={r.status === "Open" || r.status === "׳₪׳×׳•׳—" ? "#166534" : "#4b5563"} />,
+              label: "סטטוס",
+              render: (r) => <Badge text={r.status || "—"} color={r.status === "Open" || r.status === "פתוח" ? "#166534" : "#4b5563"} />,
             },
             {
               key: "pnl",
@@ -279,7 +279,7 @@ function BankTab() {
               align: "right",
               render: (r) => <span style={{ color: colorPnl(r.pnl) }}>{fmt(r.pnl)}</span>,
             },
-            { key: "date", label: "׳×׳׳¨׳™׳" },
+            { key: "date", label: "תאריך" },
             {
               key: "newsBtn",
               label: "",
@@ -289,7 +289,7 @@ function BankTab() {
                     onClick={() => setNewsModal(r.ticker)}
                     style={{ padding: "3px 10px", borderRadius: 6, border: "1px solid #3a3a5e", background: "#2a2a3e", color: "#a78bfa", cursor: "pointer", fontSize: 11, whiteSpace: "nowrap" }}
                   >
-                    נ“° ׳—׳“׳©׳•׳×
+                    📰 חדשות
                   </button>
                 ) : null,
             },
@@ -302,7 +302,7 @@ function BankTab() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 2: ׳×׳™׳§׳™׳ ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 2: תיקים ─────────────────────────────────────────────────────────────
 
 function PortfoliosTab() {
   const [data, setData] = useState(null);
@@ -317,7 +317,7 @@ function PortfoliosTab() {
   if (error) return <ErrorMsg msg={error} />;
 
   const byPortfolio = data.data.reduce((acc, r) => {
-    const key = r.portfolio || "׳׳׳ ׳×׳™׳§";
+    const key = r.portfolio || "ללא תיק";
     if (!acc[key]) acc[key] = { name: key, count: 0, totalPnl: 0, winners: 0, closed: 0 };
     acc[key].count++;
     if (r.pnl != null) { acc[key].totalPnl += r.pnl; acc[key].closed++; if (r.pnl > 0) acc[key].winners++; }
@@ -328,20 +328,20 @@ function PortfoliosTab() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>׳×׳™׳§׳™׳</h2>
+      <h2 style={{ marginBottom: 20 }}>תיקים</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
         {portfolios.map((p) => (
           <Card key={p.name}>
             <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 10 }}>{p.name}</div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#aaa" }}>
-              <span>׳¨׳©׳•׳׳•׳×</span><span style={{ color: "#fff" }}>{p.count}</span>
+              <span>רשומות</span><span style={{ color: "#fff" }}>{p.count}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#aaa", marginTop: 4 }}>
               <span>P&L</span><span style={{ color: colorPnl(p.totalPnl) }}>{fmt(p.totalPnl)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#aaa", marginTop: 4 }}>
               <span>Win Rate</span>
-              <span style={{ color: "#22c55e" }}>{p.closed > 0 ? pct((p.winners / p.closed) * 100) : "ג€”"}</span>
+              <span style={{ color: "#22c55e" }}>{p.closed > 0 ? pct((p.winners / p.closed) * 100) : "—"}</span>
             </div>
           </Card>
         ))}
@@ -350,7 +350,7 @@ function PortfoliosTab() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 3: ׳˜׳¨׳™׳™׳“׳™׳ ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 3: טריידים ───────────────────────────────────────────────────────────
 
 function TradesTab() {
   const [data, setData] = useState(null);
@@ -366,18 +366,18 @@ function TradesTab() {
   if (error) return <ErrorMsg msg={error} />;
 
   const rows = data.data.filter((r) => {
-    if (filter === "open") return r.status === "Open" || r.status === "׳₪׳×׳•׳—";
-    if (filter === "closed") return r.status === "Closed" || r.status === "׳¡׳’׳•׳¨";
+    if (filter === "open") return r.status === "Open" || r.status === "פתוח";
+    if (filter === "closed") return r.status === "Closed" || r.status === "סגור";
     return true;
   });
 
   return (
     <div>
-      <h2 style={{ marginBottom: 16 }}>׳˜׳¨׳™׳™׳“׳™׳</h2>
+      <h2 style={{ marginBottom: 16 }}>טריידים</h2>
       <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
         {["all", "open", "closed"].map((f) => (
           <button key={f} onClick={() => setFilter(f)} style={{ padding: "6px 16px", borderRadius: 8, border: "none", cursor: "pointer", background: filter === f ? "#6366f1" : "#2a2a3e", color: "#fff", fontSize: 13 }}>
-            {f === "all" ? "׳”׳›׳" : f === "open" ? "׳₪׳×׳•׳—" : "׳¡׳’׳•׳¨"}
+            {f === "all" ? "הכל" : f === "open" ? "פתוח" : "סגור"}
           </button>
         ))}
       </div>
@@ -385,17 +385,17 @@ function TradesTab() {
         <Table
           rows={rows}
           columns={[
-            { key: "ticker", label: "׳˜׳™׳§׳¨" },
-            { key: "name", label: "׳©׳" },
-            { key: "entryPrice", label: "׳›׳ ׳™׳¡׳”", align: "right", render: (r) => fmt(r.entryPrice) },
-            { key: "exitPrice", label: "׳™׳¦׳™׳׳”", align: "right", render: (r) => fmt(r.exitPrice) },
-            { key: "stopLoss", label: "׳¡׳˜׳•׳₪", align: "right", render: (r) => fmt(r.stopLoss) },
-            { key: "target", label: "׳™׳¢׳“", align: "right", render: (r) => fmt(r.target) },
+            { key: "ticker", label: "טיקר" },
+            { key: "name", label: "שם" },
+            { key: "entryPrice", label: "כניסה", align: "right", render: (r) => fmt(r.entryPrice) },
+            { key: "exitPrice", label: "יציאה", align: "right", render: (r) => fmt(r.exitPrice) },
+            { key: "stopLoss", label: "סטופ", align: "right", render: (r) => fmt(r.stopLoss) },
+            { key: "target", label: "יעד", align: "right", render: (r) => fmt(r.target) },
             { key: "riskReward", label: "R:R", align: "right", render: (r) => fmt(r.riskReward, 1) },
             { key: "pnl", label: "P&L", align: "right", render: (r) => <span style={{ color: colorPnl(r.pnl) }}>{fmt(r.pnl)}</span> },
             { key: "pnlPercent", label: "P&L %", align: "right", render: (r) => <span style={{ color: colorPnl(r.pnlPercent) }}>{pct(r.pnlPercent)}</span> },
-            { key: "status", label: "׳¡׳˜׳˜׳•׳¡", render: (r) => <Badge text={r.status || "ג€”"} color={r.status === "Open" || r.status === "׳₪׳×׳•׳—" ? "#166534" : "#374151"} /> },
-            { key: "date", label: "׳×׳׳¨׳™׳" },
+            { key: "status", label: "סטטוס", render: (r) => <Badge text={r.status || "—"} color={r.status === "Open" || r.status === "פתוח" ? "#166534" : "#374151"} /> },
+            { key: "date", label: "תאריך" },
           ]}
         />
       </Card>
@@ -403,7 +403,7 @@ function TradesTab() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 4: ׳”׳™׳˜-׳׳׳₪ ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 4: היט-מאפ ───────────────────────────────────────────────────────────
 
 function HeatmapTab() {
   const [data, setData] = useState(null);
@@ -418,7 +418,7 @@ function HeatmapTab() {
   if (error) return <ErrorMsg msg={error} />;
 
   const bySector = data.data.reduce((acc, r) => {
-    const key = r.sector || "׳׳׳ ׳¡׳§׳˜׳•׳¨";
+    const key = r.sector || "ללא סקטור";
     if (!acc[key]) acc[key] = { name: key, stocks: [] };
     acc[key].stocks.push(r);
     return acc;
@@ -436,7 +436,7 @@ function HeatmapTab() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>׳”׳™׳˜-׳׳׳₪ ׳׳₪׳™ ׳¡׳§׳˜׳•׳¨</h2>
+      <h2 style={{ marginBottom: 20 }}>היט-מאפ לפי סקטור</h2>
       {Object.values(bySector).map((sector) => (
         <div key={sector.name} style={{ marginBottom: 24 }}>
           <div style={{ fontWeight: 600, color: "#a78bfa", marginBottom: 10, fontSize: 14 }}>{sector.name}</div>
@@ -454,7 +454,7 @@ function HeatmapTab() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 5: ׳׳—׳©׳‘׳•׳ R:R ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 5: מחשבון R:R ────────────────────────────────────────────────────────
 
 function RRCalculatorTab() {
   const [entry, setEntry] = useState("");
@@ -480,29 +480,29 @@ function RRCalculatorTab() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>׳׳—׳©׳‘׳•׳ R:R</h2>
+      <h2 style={{ marginBottom: 20 }}>מחשבון R:R</h2>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <Card>
-          <Field label="׳׳—׳™׳¨ ׳›׳ ׳™׳¡׳”" value={entry} onChange={setEntry} placeholder="0.00" />
-          <Field label="׳¡׳˜׳•׳₪ ׳׳•׳¡" value={stop} onChange={setStop} placeholder="0.00" />
-          <Field label="׳™׳¢׳“" value={target} onChange={setTarget} placeholder="0.00" />
-          <Field label="׳”׳•׳ ׳׳¡׳™׳›׳•׳ ($)" value={capital} onChange={setCapital} placeholder="10000" />
-          <Field label="% ׳¡׳™׳›׳•׳ ׳׳”׳•׳" value={riskPct} onChange={setRiskPct} placeholder="1" />
+          <Field label="מחיר כניסה" value={entry} onChange={setEntry} placeholder="0.00" />
+          <Field label="סטופ לוס" value={stop} onChange={setStop} placeholder="0.00" />
+          <Field label="יעד" value={target} onChange={setTarget} placeholder="0.00" />
+          <Field label="הון לסיכון ($)" value={capital} onChange={setCapital} placeholder="10000" />
+          <Field label="% סיכון מהון" value={riskPct} onChange={setRiskPct} placeholder="1" />
         </Card>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <StatBox label="׳™׳—׳¡ R:R" value={rr ? `1 : ${rr}` : "ג€”"} color={rr >= 2 ? "#22c55e" : rr >= 1 ? "#facc15" : "#ef4444"} />
-          <StatBox label="׳¡׳™׳›׳•׳ ׳₪׳¨ ׳׳ ׳™׳”" value={riskPerShare ? `$${fmt(riskPerShare)}` : "ג€”"} color="#f97316" />
-          <StatBox label="׳₪׳•׳˜׳ ׳¦׳™׳׳ ׳₪׳¨ ׳׳ ׳™׳”" value={rewardPerShare ? `$${fmt(rewardPerShare)}` : "ג€”"} color="#22c55e" />
-          <StatBox label="׳›׳׳•׳× ׳׳ ׳™׳•׳×" value={shares ?? "ג€”"} color="#60a5fa" />
-          <StatBox label="׳’׳•׳“׳ ׳₪׳•׳–׳™׳¦׳™׳”" value={positionSize ? `$${fmt(positionSize)}` : "ג€”"} color="#a78bfa" />
-          <StatBox label="׳¡׳›׳•׳ ׳¡׳™׳›׳•׳" value={riskAmount ? `$${fmt(riskAmount)}` : "ג€”"} color="#ef4444" />
+          <StatBox label="יחס R:R" value={rr ? `1 : ${rr}` : "—"} color={rr >= 2 ? "#22c55e" : rr >= 1 ? "#facc15" : "#ef4444"} />
+          <StatBox label="סיכון פר מניה" value={riskPerShare ? `$${fmt(riskPerShare)}` : "—"} color="#f97316" />
+          <StatBox label="פוטנציאל פר מניה" value={rewardPerShare ? `$${fmt(rewardPerShare)}` : "—"} color="#22c55e" />
+          <StatBox label="כמות מניות" value={shares ?? "—"} color="#60a5fa" />
+          <StatBox label="גודל פוזיציה" value={positionSize ? `$${fmt(positionSize)}` : "—"} color="#a78bfa" />
+          <StatBox label="סכום סיכון" value={riskAmount ? `$${fmt(riskAmount)}` : "—"} color="#ef4444" />
         </div>
       </div>
     </div>
   );
 }
 
-// ג”€ג”€ג”€ TAB 6: ׳™׳•׳׳ ׳“׳•׳—׳•׳× ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 6: יומן דוחות ────────────────────────────────────────────────────────
 
 function EarningsTab() {
   const [data, setData] = useState(null);
@@ -522,23 +522,23 @@ function EarningsTab() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>׳™׳•׳׳ ׳“׳•׳—׳•׳×</h2>
-      <h3 style={{ color: "#a78bfa", marginBottom: 12, fontSize: 14 }}>׳§׳¨׳•׳‘׳™׳ ({upcoming.length})</h3>
+      <h2 style={{ marginBottom: 20 }}>יומן דוחות</h2>
+      <h3 style={{ color: "#a78bfa", marginBottom: 12, fontSize: 14 }}>קרובים ({upcoming.length})</h3>
       <Card style={{ marginBottom: 24 }}>
         <Table rows={upcoming} columns={[
-          { key: "date", label: "׳×׳׳¨׳™׳" },
-          { key: "ticker", label: "׳˜׳™׳§׳¨" },
-          { key: "name", label: "׳©׳" },
-          { key: "portfolio", label: "׳×׳™׳§" },
-          { key: "notes", label: "׳”׳¢׳¨׳•׳×" },
+          { key: "date", label: "תאריך" },
+          { key: "ticker", label: "טיקר" },
+          { key: "name", label: "שם" },
+          { key: "portfolio", label: "תיק" },
+          { key: "notes", label: "הערות" },
         ]} />
       </Card>
-      <h3 style={{ color: "#6b7280", marginBottom: 12, fontSize: 14 }}>׳¢׳‘׳¨ ({past.length})</h3>
+      <h3 style={{ color: "#6b7280", marginBottom: 12, fontSize: 14 }}>עבר ({past.length})</h3>
       <Card>
         <Table rows={past.slice(0, 30)} columns={[
-          { key: "date", label: "׳×׳׳¨׳™׳" },
-          { key: "ticker", label: "׳˜׳™׳§׳¨" },
-          { key: "name", label: "׳©׳" },
+          { key: "date", label: "תאריך" },
+          { key: "ticker", label: "טיקר" },
+          { key: "name", label: "שם" },
           { key: "pnl", label: "P&L", align: "right", render: (r) => <span style={{ color: colorPnl(r.pnl) }}>{fmt(r.pnl)}</span> },
         ]} />
       </Card>
@@ -546,7 +546,7 @@ function EarningsTab() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 7: ׳”׳©׳•׳•׳׳” ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 7: השוואה ────────────────────────────────────────────────────────────
 
 function CompareTab() {
   const [data, setData] = useState(null);
@@ -567,17 +567,17 @@ function CompareTab() {
   const stockA = rows.find((r) => r.ticker === selectedA);
   const stockB = rows.find((r) => r.ticker === selectedB);
   const metrics = ["entryPrice", "exitPrice", "stopLoss", "target", "riskReward", "pnl", "pnlPercent", "sector", "portfolio", "date"];
-  const labels = { entryPrice: "׳׳—׳™׳¨ ׳›׳ ׳™׳¡׳”", exitPrice: "׳׳—׳™׳¨ ׳™׳¦׳™׳׳”", stopLoss: "׳¡׳˜׳•׳₪", target: "׳™׳¢׳“", riskReward: "R:R", pnl: "P&L", pnlPercent: "P&L %", sector: "׳¡׳§׳˜׳•׳¨", portfolio: "׳×׳™׳§", date: "׳×׳׳¨׳™׳" };
+  const labels = { entryPrice: "מחיר כניסה", exitPrice: "מחיר יציאה", stopLoss: "סטופ", target: "יעד", riskReward: "R:R", pnl: "P&L", pnlPercent: "P&L %", sector: "סקטור", portfolio: "תיק", date: "תאריך" };
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>׳”׳©׳•׳•׳׳× ׳׳ ׳™׳•׳×</h2>
+      <h2 style={{ marginBottom: 20 }}>השוואת מניות</h2>
       <div style={{ display: "flex", gap: 16, marginBottom: 24 }}>
-        {[{ val: selectedA, set: setSelectedA, label: "׳׳ ׳™׳” ׳׳³" }, { val: selectedB, set: setSelectedB, label: "׳׳ ׳™׳” ׳‘׳³" }].map(({ val, set, label }) => (
+        {[{ val: selectedA, set: setSelectedA, label: "מניה א׳" }, { val: selectedB, set: setSelectedB, label: "מניה ב׳" }].map(({ val, set, label }) => (
           <div key={label} style={{ flex: 1 }}>
             <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>{label}</label>
             <select value={val} onChange={(e) => set(e.target.value)} style={{ width: "100%", background: "#2a2a3e", border: "1px solid #444", borderRadius: 8, padding: "8px 12px", color: "#fff", fontSize: 14 }}>
-              <option value="">׳‘׳—׳¨ ׳˜׳™׳§׳¨...</option>
+              <option value="">בחר טיקר...</option>
               {tickers.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
@@ -588,17 +588,17 @@ function CompareTab() {
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
               <tr>
-                <th style={{ padding: "8px 12px", color: "#888", textAlign: "left", borderBottom: "1px solid #333" }}>׳׳“׳“</th>
-                <th style={{ padding: "8px 12px", color: "#60a5fa", textAlign: "center", borderBottom: "1px solid #333" }}>{selectedA || "׳׳³"}</th>
-                <th style={{ padding: "8px 12px", color: "#f97316", textAlign: "center", borderBottom: "1px solid #333" }}>{selectedB || "׳‘׳³"}</th>
+                <th style={{ padding: "8px 12px", color: "#888", textAlign: "left", borderBottom: "1px solid #333" }}>מדד</th>
+                <th style={{ padding: "8px 12px", color: "#60a5fa", textAlign: "center", borderBottom: "1px solid #333" }}>{selectedA || "א׳"}</th>
+                <th style={{ padding: "8px 12px", color: "#f97316", textAlign: "center", borderBottom: "1px solid #333" }}>{selectedB || "ב׳"}</th>
               </tr>
             </thead>
             <tbody>
               {metrics.map((m) => (
                 <tr key={m} style={{ borderBottom: "1px solid #2a2a3e" }}>
                   <td style={{ padding: "8px 12px", color: "#aaa" }}>{labels[m]}</td>
-                  <td style={{ padding: "8px 12px", textAlign: "center", color: ["pnl", "pnlPercent"].includes(m) ? colorPnl(stockA?.[m]) : "#fff" }}>{stockA?.[m] ?? "ג€”"}</td>
-                  <td style={{ padding: "8px 12px", textAlign: "center", color: ["pnl", "pnlPercent"].includes(m) ? colorPnl(stockB?.[m]) : "#fff" }}>{stockB?.[m] ?? "ג€”"}</td>
+                  <td style={{ padding: "8px 12px", textAlign: "center", color: ["pnl", "pnlPercent"].includes(m) ? colorPnl(stockA?.[m]) : "#fff" }}>{stockA?.[m] ?? "—"}</td>
+                  <td style={{ padding: "8px 12px", textAlign: "center", color: ["pnl", "pnlPercent"].includes(m) ? colorPnl(stockB?.[m]) : "#fff" }}>{stockB?.[m] ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -609,7 +609,7 @@ function CompareTab() {
   );
 }
 
-// ג”€ג”€ג”€ TAB 8: ׳¢׳“׳›׳•׳ ׳™׳•׳׳™ ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── TAB 8: עדכון יומי ────────────────────────────────────────────────────────
 
 function DailyUpdateTab() {
   const [data, setData] = useState(null);
@@ -625,31 +625,31 @@ function DailyUpdateTab() {
   if (loading) return <Loader />;
   if (error) return <ErrorMsg msg={error} />;
 
-  const open = data.data.filter((r) => r.status === "Open" || r.status === "׳₪׳×׳•׳—");
+  const open = data.data.filter((r) => r.status === "Open" || r.status === "פתוח");
   const unrealizedPnl = open.reduce((s, r) => s + (r.pnl ?? 0), 0);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 4 }}>׳¢׳“׳›׳•׳ ׳™׳•׳׳™</h2>
+      <h2 style={{ marginBottom: 4 }}>עדכון יומי</h2>
       <div style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>{today}</div>
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
-        <StatBox label="׳₪׳•׳–׳™׳¦׳™׳•׳× ׳₪׳×׳•׳—׳•׳×" value={open.length} color="#60a5fa" />
-        <StatBox label="P&L ׳׳ ׳׳׳•׳׳©" value={fmt(unrealizedPnl)} color={colorPnl(unrealizedPnl)} />
-        <StatBox label="׳¨׳©׳•׳׳•׳× ׳”׳™׳•׳" value={data.stats.total} />
+        <StatBox label="פוזיציות פתוחות" value={open.length} color="#60a5fa" />
+        <StatBox label="P&L לא ממומש" value={fmt(unrealizedPnl)} color={colorPnl(unrealizedPnl)} />
+        <StatBox label="רשומות היום" value={data.stats.total} />
       </div>
-      <h3 style={{ fontSize: 14, color: "#a78bfa", marginBottom: 12 }}>׳₪׳•׳–׳™׳¦׳™׳•׳× ׳₪׳×׳•׳—׳•׳× ׳׳¡׳§׳™׳¨׳”</h3>
+      <h3 style={{ fontSize: 14, color: "#a78bfa", marginBottom: 12 }}>פוזיציות פתוחות לסקירה</h3>
       <Card>
         <Table
           rows={open}
           columns={[
-            { key: "ticker", label: "׳˜׳™׳§׳¨" },
-            { key: "name", label: "׳©׳" },
-            { key: "entryPrice", label: "׳›׳ ׳™׳¡׳”", align: "right", render: (r) => fmt(r.entryPrice) },
-            { key: "stopLoss", label: "׳¡׳˜׳•׳₪", align: "right", render: (r) => fmt(r.stopLoss) },
-            { key: "target", label: "׳™׳¢׳“", align: "right", render: (r) => fmt(r.target) },
+            { key: "ticker", label: "טיקר" },
+            { key: "name", label: "שם" },
+            { key: "entryPrice", label: "כניסה", align: "right", render: (r) => fmt(r.entryPrice) },
+            { key: "stopLoss", label: "סטופ", align: "right", render: (r) => fmt(r.stopLoss) },
+            { key: "target", label: "יעד", align: "right", render: (r) => fmt(r.target) },
             { key: "riskReward", label: "R:R", align: "right", render: (r) => fmt(r.riskReward, 1) },
             { key: "pnl", label: "P&L", align: "right", render: (r) => <span style={{ color: colorPnl(r.pnl) }}>{fmt(r.pnl)}</span> },
-            { key: "notes", label: "׳”׳¢׳¨׳•׳×" },
+            { key: "notes", label: "הערות" },
           ]}
         />
       </Card>
@@ -657,17 +657,17 @@ function DailyUpdateTab() {
   );
 }
 
-// ג”€ג”€ג”€ App Shell ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€ג”€
+// ─── App Shell ────────────────────────────────────────────────────────────────
 
 const TABS = [
-  { id: "bank", label: "נ¦ ׳‘׳ ׳§", component: BankTab },
-  { id: "portfolios", label: "נ“ ׳×׳™׳§׳™׳", component: PortfoliosTab },
-  { id: "trades", label: "נ“ˆ ׳˜׳¨׳™׳™׳“׳™׳", component: TradesTab },
-  { id: "heatmap", label: "נ”¥ ׳”׳™׳˜-׳׳׳₪", component: HeatmapTab },
-  { id: "rr", label: "ג–ן¸ R:R", component: RRCalculatorTab },
-  { id: "earnings", label: "נ“… ׳™׳•׳׳ ׳“׳•׳—׳•׳×", component: EarningsTab },
-  { id: "compare", label: "נ” ׳”׳©׳•׳•׳׳”", component: CompareTab },
-  { id: "daily", label: "נ“‹ ׳¢׳“׳›׳•׳ ׳™׳•׳׳™", component: DailyUpdateTab },
+  { id: "bank", label: "🏦 בנק", component: BankTab },
+  { id: "portfolios", label: "📁 תיקים", component: PortfoliosTab },
+  { id: "trades", label: "📈 טריידים", component: TradesTab },
+  { id: "heatmap", label: "🔥 היט-מאפ", component: HeatmapTab },
+  { id: "rr", label: "⚖️ R:R", component: RRCalculatorTab },
+  { id: "earnings", label: "📅 יומן דוחות", component: EarningsTab },
+  { id: "compare", label: "🔍 השוואה", component: CompareTab },
+  { id: "daily", label: "📋 עדכון יומי", component: DailyUpdateTab },
 ];
 
 export default function App() {
