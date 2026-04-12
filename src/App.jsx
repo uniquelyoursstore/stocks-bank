@@ -135,25 +135,34 @@ function AlertsBanner() {
   const [triggered, setTriggered] = useState([]);
 
   useEffect(() => {
+    let activeAlerts = [];
+
+    const checkAlerts = () => {
+      if (!activeAlerts.length) return;
+      const tickers = [...new Set(activeAlerts.map((a) => a.ticker))].join(",");
+      fetch(`/api/prices?tickers=${tickers}`)
+        .then((r) => r.json())
+        .then(({ prices }) => {
+          const hits = activeAlerts.filter((a) => {
+            const livePrice = prices?.[a.ticker]?.price;
+            if (livePrice == null) return false;
+            return a.direction === "above" ? livePrice >= a.triggerPrice : livePrice <= a.triggerPrice;
+          });
+          setTriggered(hits);
+        })
+        .catch(() => {});
+    };
+
     fetch("/alerts.json")
       .then((r) => r.json())
       .then(({ alerts }) => {
-        const active = (alerts || []).filter((a) => a.active && !a.triggered);
-        if (!active.length) return;
-        const tickers = [...new Set(active.map((a) => a.ticker))].join(",");
-        fetch(`/api/prices?tickers=${tickers}`)
-          .then((r) => r.json())
-          .then(({ prices }) => {
-            const hits = active.filter((a) => {
-              const livePrice = prices?.[a.ticker]?.price;
-              if (livePrice == null) return false;
-              return a.direction === "above" ? livePrice >= a.triggerPrice : livePrice <= a.triggerPrice;
-            });
-            setTriggered(hits);
-          })
-          .catch(() => {});
+        activeAlerts = (alerts || []).filter((a) => a.active && !a.triggered);
+        checkAlerts();
       })
       .catch(() => {});
+
+    const interval = setInterval(checkAlerts, 15 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   if (!triggered.length) return null;
@@ -179,23 +188,35 @@ function BankTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [livePrices, setLivePrices] = useState({});
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [sectorFilter, setSectorFilter] = useState("all");
   const [newsModal, setNewsModal] = useState(null);
 
   useEffect(() => {
+    let tickers = [];
+
+    const fetchPrices = () => {
+      if (!tickers.length) return;
+      fetch(`/api/prices?tickers=${tickers.join(",")}`)
+        .then((r) => r.json())
+        .then(({ prices }) => {
+          setLivePrices(prices || {});
+          setLastUpdated(new Date());
+        })
+        .catch(() => {});
+    };
+
     fetchStocks()
       .then((d) => {
         setData(d);
-        const tickers = [...new Set(d.data.map((r) => r.ticker).filter(Boolean))];
-        if (tickers.length) {
-          fetch(`/api/prices?tickers=${tickers.join(",")}`)
-            .then((r) => r.json())
-            .then(({ prices }) => setLivePrices(prices || {}))
-            .catch(() => {});
-        }
+        tickers = [...new Set(d.data.map((r) => r.ticker).filter(Boolean))];
+        fetchPrices();
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
+
+    const interval = setInterval(fetchPrices, 15 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) return <Loader />;
@@ -207,7 +228,14 @@ function BankTab() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>סקירת בנק</h2>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+        <h2 style={{ margin: 0 }}>סקירת בנק</h2>
+        {lastUpdated && (
+          <span style={{ fontSize: 11, color: "#6b7280" }}>
+            עודכן {lastUpdated.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}
+          </span>
+        )}
+      </div>
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
         <StatBox label="סה״כ רשומות" value={stats.total} />
