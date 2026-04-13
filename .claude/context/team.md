@@ -33,6 +33,12 @@
 - `NOTION_TOKEN` — נמצא ב-Vercel Environment Variables בלבד, **לא בקוד**
 - עריכת קבצים → רק דרך git (add / commit / push)
 
+## העדפות עבודה — Claude Code
+- **אוטומציה תמיד לפני שאלה** — לפני שמבקשים מהמשתמש לעשות משהו ידנית, לנסות כל דרך אוטומטית אפשרית (GitHub API, curl, MCP tools וכו')
+- **GitHub MCP token** פג כל session — להשתמש ב-`mcp__github__authenticate` בתחילת session לחידוש. אחרי auth, ה-callback URL מגיע מהמשתמש
+- **בדיקת deploy** — להשתמש ב-GitHub Deployments API (`curl https://api.github.com/repos/uniquelyoursstore/stocks-bank/deployments`) במקום לבקש מהמשתמש לבדוק
+- **גישה לאתר** — הפרוקסי של הסביבה חוסם `stocks-bank.vercel.app` — לבדוק סטטוס דרך GitHub API ולא דרך curl ישיר לאתר
+
 ---
 
 ## ויזיה לטווח ארוך

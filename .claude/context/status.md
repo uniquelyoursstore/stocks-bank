@@ -5,22 +5,19 @@
 ---
 
 ## עכשיו עובדים על
-תיקון קידוד עברית ב-App.jsx + העלאה ל-main. הפרויקט מחכה לחיבור Vercel.
+האתר חי ב-Vercel ✅. בדיקת תקינות מלאה + הוספת polling מחירים אוטומטי.
 
 ## הצעד הבא (המשך ישיר)
-1. **חובה ידני** — לפתוח Vercel, לחבר את הריפו `uniquelyoursstore/stocks-bank` ולהגדיר `NOTION_TOKEN`
-2. לאחר מכן — עדכון מחירים אוטומטי כל 15 דקות (עדיפות 1)
-3. שורת ביצועים לכל מנייה: 1D / 5D / 1M / YTD / 1Y
+1. **לאמת** שה-`NOTION_TOKEN` מוגדר ב-Vercel ושה-`DATABASE_ID` נכון — כל 7 הטאבים תלויים בזה
+2. **שורת ביצועים** לכל מנייה: 1D / 5D / 1M / YTD / 1Y (עדיפות 1 הבאה)
+3. תהליך אישור מנייה חדשה עם כפתורי הצבעה (3/3)
 
 ---
 
 ## משימות פתוחות
 
-### עדיפות 0 — חסום (דורש פעולה ידנית)
-- [ ] חיבור Vercel לריפו + הגדרת `NOTION_TOKEN` (ידני — אין גישת CLI)
-
 ### עדיפות 1 — לעשות קודם
-- [ ] עדכון מחירים אוטומטי כל 15 דקות (Yahoo Finance polling)
+- [ ] לאמת שה-`NOTION_TOKEN` מוגדר ב-Vercel (Vercel → Project Settings → Environment Variables)
 - [ ] שורת ביצועים לכל מנייה: 1D / 5D / 1M / YTD / 1Y
 
 ### עדיפות 2 — חשוב
@@ -43,11 +40,16 @@
 - ✅ מבנה זיכרון: `CLAUDE.md` + `.claude/context/` + `.claude/commands/`
 - ✅ `status.md` — קובץ quick-start לכל session, מחובר ל-`/update-memory`
 - ✅ סקיל `/update-memory` — נוצר, נבדק ועובד
-- ✅ כל 5 פרומפטי הסקילים הועתקו ל-`.claude/commands/` (morning-brief, stock-add, alert-add, technical-analysis, weekly-review)
-- ✅ `src/App.jsx` — תוקן פגם קידוד cp1255 שהפך כל הטקסט העברי לג'יבריש + שבר פילטרי סטטוס
+- ✅ כל 5 פרומפטי הסקילים הועתקו ל-`.claude/commands/`
+- ✅ `src/App.jsx` — תוקן פגם קידוד cp1255
+- ✅ מיזוג כל הסשנים ל-`main` + push → Vercel deploy הצליח (state: success)
+- ✅ polling מחירים אוטומטי כל 15 דקות — `BankTab` + `AlertsBanner`
+- ✅ אינדיקטור "עודכן HH:MM" ב-BankTab
 
 ---
 
 ## בעיות ידועות
-- `App.jsx` הוא קובץ אחד של 715 שורות — עלול לגרום לקונפליקטים כשעובדים בצוות
-- Vercel לא מחובר — האתר `stocks-bank.vercel.app` לא קיים עדיין, צריך לחבר ידנית
+- `App.jsx` הוא קובץ אחד של ~730 שורות — עלול לגרום לקונפליקטים כשעובדים בצוות
+- לא ברור אם `NOTION_TOKEN` מוגדר ב-Vercel — יש לאמת לפני session הבא
+- `DATABASE_ID` מקודד קשיח ב-`api/stocks.js` — לאמת שמצביע לנוטיין הנכון
+- GitHub MCP token פג כל session — בכל session חדש צריך לחדש ע"י mcp__github__authenticate
