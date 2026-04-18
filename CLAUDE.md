@@ -32,3 +32,4 @@
 | הוספה / עדכון / הבנה של מניות | `.claude/context/stocks.md` + `.claude/context/notion.md` |
 | הבנת תפקידים / כלים / אבטחה | `.claude/context/team.md` |
 | תכנון מה הלאה | `.claude/context/features.md` (חלק "משימות פתוחות") |
+| תזרים עבודה / Git / ברנצ'ים / סנכרון | `.claude/context/workflow.md` |
