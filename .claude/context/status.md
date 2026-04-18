@@ -5,11 +5,11 @@
 ---
 
 ## עכשיו עובדים על
-האתר חי ב-Vercel ✅. בדיקת תקינות מלאה + הוספת polling מחירים אוטומטי.
+סשן אוריינטציה — הסבר תזרים עבודה לוקלי/ענן + יצירת מסמך פורמט עבודה משותף.
 
 ## הצעד הבא (המשך ישיר)
-1. **לאמת** שה-`NOTION_TOKEN` מוגדר ב-Vercel ושה-`DATABASE_ID` נכון — כל 7 הטאבים תלויים בזה
-2. **שורת ביצועים** לכל מנייה: 1D / 5D / 1M / YTD / 1Y (עדיפות 1 הבאה)
+1. **שורת ביצועים** לכל מנייה: 1D / 5D / 1M / YTD / 1Y (עדיפות 1)
+2. **לאמת** שה-`NOTION_TOKEN` מוגדר ב-Vercel ושה-`DATABASE_ID` נכון
 3. תהליך אישור מנייה חדשה עם כפתורי הצבעה (3/3)
 
 ---
@@ -32,6 +32,8 @@
 ---
 
 ## הושלם לאחרונה
+- ✅ `.claude/context/workflow.md` — מסמך פורמט עבודה מלא (Git, ברנצ'ים, לוקלי/ענן, צוות, זיכרון) — מוזג ל-`main`
+- ✅ `CLAUDE.md` — נוסף workflow.md לטבלת ה-Index
 - ✅ `api/stocks.js` — Vercel serverless function לנוטיין
 - ✅ `src/App.jsx` — דאשבורד עם 8 טאבים ומחירים חיים
 - ✅ `public/alerts.json` — קובץ התראות (RDW מעל $10.32, KTOS מתחת $70.70)
@@ -53,3 +55,4 @@
 - לא ברור אם `NOTION_TOKEN` מוגדר ב-Vercel — יש לאמת לפני session הבא
 - `DATABASE_ID` מקודד קשיח ב-`api/stocks.js` — לאמת שמצביע לנוטיין הנכון
 - GitHub MCP token פג כל session — בכל session חדש צריך לחדש ע"י mcp__github__authenticate
+- 3 ברנצ'ים ריקים ב-remote (`review-open-tasks-Qbfzm`, `define-next-steps-Y6wmJ`, `project-status-review-CribY`) — לא ניתן למחוק (403), לא פוגעים בפרויקט
