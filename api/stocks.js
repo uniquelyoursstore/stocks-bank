@@ -67,19 +67,27 @@ function mapRow(page) {
     created: page.created_time,
     updated: page.last_edited_time,
     // Common fields — extend as needed based on your Notion schema
-    name: extractProp(p, "Name") ?? extractProp(p, "שם") ?? extractProp(p, "Stock"),
+    name: extractProp(p, "שם החברה") ?? extractProp(p, "Name") ?? extractProp(p, "שם") ?? extractProp(p, "Stock"),
     ticker: extractProp(p, "Ticker") ?? extractProp(p, "טיקר"),
     sector: extractProp(p, "Sector") ?? extractProp(p, "סקטור"),
+    subSector: extractProp(p, "תת-סקטור"),
     status: extractProp(p, "Status") ?? extractProp(p, "סטטוס"),
-    portfolio: extractProp(p, "Portfolio") ?? extractProp(p, "תיק"),
+    portfolio: extractProp(p, "שכבה") ?? extractProp(p, "Portfolio") ?? extractProp(p, "תיק"),
     entryPrice: extractProp(p, "Entry Price") ?? extractProp(p, "מחיר כניסה"),
     exitPrice: extractProp(p, "Exit Price") ?? extractProp(p, "מחיר יציאה"),
     stopLoss: extractProp(p, "Stop Loss") ?? extractProp(p, "סטופ"),
-    target: extractProp(p, "Target") ?? extractProp(p, "יעד"),
+    target: extractProp(p, "מחיר יעד") ?? extractProp(p, "Target") ?? extractProp(p, "יעד"),
+    currentPrice: extractProp(p, "מחיר נוכחי"),
+    weight: extractProp(p, "משקל מוצע %"),
+    risk: extractProp(p, "סיכון"),
+    thesis: extractProp(p, "תזה"),
+    technical: extractProp(p, "טכני"),
+    fundamental: extractProp(p, "פונדמנטל"),
+    addedBy: extractProp(p, "נוסף על ידי"),
     riskReward: extractProp(p, "R:R") ?? extractProp(p, "risk_reward"),
     pnl: extractProp(p, "P&L") ?? extractProp(p, "רווח/הפסד"),
     pnlPercent: extractProp(p, "P&L %") ?? extractProp(p, "% רווח/הפסד"),
-    date: extractProp(p, "Date") ?? extractProp(p, "תאריך"),
+    date: extractProp(p, "Date") ?? extractProp(p, "תאריך") ?? page.created_time,
     notes: extractProp(p, "Notes") ?? extractProp(p, "הערות"),
     tags: extractProp(p, "Tags") ?? extractProp(p, "תגיות") ?? [],
     // Raw props for any unmapped field
@@ -105,53 +113,28 @@ export default async function handler(req, res) {
     let filter = null;
     let sorts = [{ timestamp: "created_time", direction: "descending" }];
 
-    // Per-tab filtering
+    // Per-tab filtering — using fields that actually exist in the Notion DB
     if (tab === "trades") {
-      filter = {
-        or: [
-          { property: "Status", select: { equals: "Open" } },
-          { property: "Status", select: { equals: "Closed" } },
-          { property: "סטטוס", select: { equals: "פתוח" } },
-          { property: "סטטוס", select: { equals: "סגור" } },
-        ],
-      };
-      sorts = [{ property: "Date", direction: "descending" }];
+      // No status filter — show all rows, the frontend will filter by actual status values
+      sorts = [{ timestamp: "created_time", direction: "descending" }];
     } else if (tab === "heatmap") {
-      sorts = [{ property: "Sector", direction: "ascending" }];
+      sorts = [{ property: "סקטור", direction: "ascending" }];
     } else if (tab === "earnings") {
-      filter = {
-        property: "Date",
-        date: { is_not_empty: true },
-      };
-      sorts = [{ property: "Date", direction: "ascending" }];
+      // No Date field in the DB — return all, sorted by created time
+      sorts = [{ timestamp: "created_time", direction: "ascending" }];
     }
 
     // Additional filters from query params
     const andFilters = [];
     if (filter) andFilters.push(filter);
     if (ticker) {
-      andFilters.push({
-        or: [
-          { property: "Ticker", rich_text: { contains: ticker } },
-          { property: "טיקר", rich_text: { contains: ticker } },
-        ],
-      });
+      andFilters.push({ property: "טיקר", rich_text: { contains: ticker } });
     }
     if (portfolio) {
-      andFilters.push({
-        or: [
-          { property: "Portfolio", select: { equals: portfolio } },
-          { property: "תיק", select: { equals: portfolio } },
-        ],
-      });
+      andFilters.push({ property: "שכבה", select: { equals: portfolio } });
     }
     if (status) {
-      andFilters.push({
-        or: [
-          { property: "Status", select: { equals: status } },
-          { property: "סטטוס", select: { equals: status } },
-        ],
-      });
+      andFilters.push({ property: "סטטוס", select: { equals: status } });
     }
 
     const combinedFilter =
@@ -173,10 +156,10 @@ export default async function handler(req, res) {
 
     if (tab === "trades" || !tab) {
       const closed = rows.filter(
-        (r) => r.status === "Closed" || r.status === "סגור"
+        (r) => r.status === "בבדיקה" || r.status === "Closed" || r.status === "סגור"
       );
       const open = rows.filter(
-        (r) => r.status === "Open" || r.status === "פתוח"
+        (r) => r.status === "פעיל" || r.status === "Open" || r.status === "פתוח"
       );
       const winners = closed.filter((r) => (r.pnl ?? 0) > 0);
       stats.openTrades = open.length;
